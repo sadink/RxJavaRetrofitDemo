@@ -1,0 +1,116 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        applicationId "com.ooo.rxjavaretrofit1"
+        minSdkVersion 18
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        flavorDimensions "app"
+        productFlavors {
+            releaselocal {
+                dimension "app"
+                buildConfigField "String", "SERVICE", '""'
+                buildConfigField "boolean", "isUpdate", "true"
+                buildConfigField "String", "BUILDTYPE", '"releaselocal"'
+            }
+            releaselhf {
+                dimension "app"
+                buildConfigField "String", "SERVICE", '"http://' + project.app_Service + '/front/"'
+                buildConfigField "boolean", "isUpdate", "true"
+                buildConfigField "String", "BUILDTYPE", '"releaselhf"'
+            }
+            productFlavors.all { flavor ->
+                flavor.manifestPlaceholders = [APP_CHANNEL_VALUE: name]
+            }
+        }
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a", "x86"
+//            abiFilters "armeabi", "armeabi-v7a", 'armeabi-v8a',"x86_64","x86"
+        }
+    }
+
+
+    signingConfigs {
+        release {
+            storeFile file("../key/lhfBoy.jks")
+            storePassword rootProject.ext.storePassword
+            keyAlias rootProject.ext.keyAlias
+            keyPassword rootProject.ext.keyPassword
+        }
+    }
+
+
+    buildTypes {
+        debug {
+            debuggable true
+            // 设置数据库访问端口
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            zipAlignEnabled true
+//            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        release {
+            minifyEnabled true
+            shrinkResources true
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        android.applicationVariants.all { variant ->
+            variant.outputs.all {
+                if (variant.buildType.name.equals('release')) {
+                    variant.getPackageApplicationProvider().get().outputDirectory = new File(project.rootDir.absolutePath + "/apks/${variant.applicationId}")
+                    def fileName = "${((project.name != "app") ? project.name : rootProject.name)}_${defaultConfig.versionName}_${releaseTime()}.apk"
+                    outputFileName = fileName
+                    println "文件路径：-----------------${variant.getPackageApplicationProvider().get().outputDirectory}"
+                    println "文件名：-----------------${fileName}"
+                }
+            }
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+
+    // RxJava + Retrofit
+    api 'com.squareup.retrofit2:retrofit:2.5.0'
+    api 'com.squareup.retrofit2:converter-gson:2.5.0'
+    api 'com.squareup.retrofit2:adapter-rxjava:2.4.0'
+    api 'io.reactivex:rxjava:1.3.8'
+    api 'io.reactivex:rxandroid:1.2.1'
+    // 持久化Cookie处理
+    api 'com.github.franmontiel:PersistentCookieJar:v1.0.1'
+
+    // 图片Glide
+    api 'com.github.bumptech.glide:glide:3.7.0'
+    api 'com.github.bumptech.glide:okhttp3-integration:1.4.0@aar'
+
+    // 提示框
+    api 'com.github.Dovar66:DToast:1.1.5'
+
+}
+
+
+
+static def releaseTime() {
+    return new Date().format("yyyyMMddHHmmss", TimeZone.getTimeZone("GMT+08:00"))
+}
