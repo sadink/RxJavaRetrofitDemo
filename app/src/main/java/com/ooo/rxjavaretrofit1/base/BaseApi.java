@@ -10,7 +10,7 @@ import rx.Observable;
 
 /**
  * API接口类
- * Created by Dongdd on 2019/9/24 0024 10:07.
+ * Created by lhfBoy on 2019/9/24 0024 10:07.
  */
 public interface BaseApi {
 

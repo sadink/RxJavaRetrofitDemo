@@ -1,7 +1,7 @@
 package com.ooo.rxjavaretrofit1.base;
 
 /**
- * Created by Dongdd on 2019/9/24 0024 10:08.
+ * Created by lhfBoy on 2019/9/24 0024 10:08.
  */
 public class BaseConfig {
     public static String LOG = "ooo";

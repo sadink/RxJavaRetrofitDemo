@@ -12,7 +12,7 @@ import com.ooo.rxjavaretrofit1.base.BaseConfig;
 
 /**
  * 自定义加载进度条视图
- * dongdd on 2017/6/9 14:29
+ * lhfBoy on 2017/6/9 14:29
  */
 
 public class MyProgressCircleDialog {

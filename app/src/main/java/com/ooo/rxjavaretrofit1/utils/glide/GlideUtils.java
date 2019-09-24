@@ -25,7 +25,7 @@ import java.math.BigDecimal;
 
 /**
  * 图片加载工具类-Glide
- * dongdd on 2017/3/7 17:08
+ * lhfBoy on 2017/3/7 17:08
  */
 public class GlideUtils {
 

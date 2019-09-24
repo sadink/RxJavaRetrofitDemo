@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
 /**
  * Glide加载图片设置边框和圆形裁剪处理
- * dongdd on 2017/11/30 22:19
+ * lhfBoy on 2017/11/30 22:19
  */
 
 public class GlideCircleTransform extends BitmapTransformation {
